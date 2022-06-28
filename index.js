@@ -21,6 +21,13 @@ async function run() {
     await client.connect();
     const productCollection = client.db("smartPhone").collection("product");
 
+    app.get("/products", async (req, res) => {
+      const query = {};
+      const cursor = productCollection.find(query);
+      const product = await cursor.toArray();
+      res.send(product);
+    });
+
     // real/load all date Get method
     app.get("/product", async (req, res) => {
       const email = req.query.email;
