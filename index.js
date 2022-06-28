@@ -16,9 +16,6 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
-//db: smartPhone
-//collection: product
-
 async function run() {
   try {
     await client.connect();
@@ -26,10 +23,10 @@ async function run() {
 
     // real/load all date Get method
     app.get("/product", async (req, res) => {
-      const query = {};
+      const email = req.query.email;
+      const query = { email: email };
       const cursor = productCollection.find(query);
       const product = await cursor.toArray();
-      console.log("");
       res.send(product);
     });
 
@@ -43,8 +40,8 @@ async function run() {
 
     // single date database pathano post method
     app.post("/product", async (req, res) => {
-      const newProduct = req.body;
-      const result = await productCollection.insertOne(newProduct);
+      const addNewProduct = req.body;
+      const result = await productCollection.insertOne(addNewProduct);
       res.send(result);
     });
 
@@ -53,6 +50,20 @@ async function run() {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await productCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // UPDATE quantity
+    app.put("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const quantity = req.body.quantity;
+      const updateDoc = {
+        $set: {
+          quantity: quantity,
+        },
+      };
+      const result = await productCollection.updateOne(query, updateDoc);
       res.send(result);
     });
   } finally {
