@@ -45,7 +45,7 @@ async function run() {
       res.send(product);
     });
 
-    // single date database pathano post method
+    // single date database post method
     app.post("/product", async (req, res) => {
       const addNewProduct = req.body;
       const result = await productCollection.insertOne(addNewProduct);
@@ -81,7 +81,7 @@ run().catch(console.dir);
 
 // get response server
 app.get("/", (req, res) => {
-  res.send("Running server side");
+  res.send("Smart-Phone Warehouse Running server side");
 });
 
 // listen port
